@@ -3,7 +3,7 @@ import { Chart } from ".././components/custom/Chart";
 
 import { TransactionList } from "@/components/custom/TransactionList";
 import TransactionForm from "@/components/custom/TransactionForm";
-import Piechart from "@/components/custom/PieChart";
+import Piechart from "@/components/custom/Piechart";
 
 function Dashboard() {
   return (
