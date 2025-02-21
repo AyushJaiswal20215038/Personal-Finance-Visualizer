@@ -1,12 +1,10 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -18,6 +16,7 @@ import {
 } from "@/components/ui/chart";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import Piechart from "./Piechart";
 
 export function Chart() {
   const allTransactions = useSelector((state) => state.counter.value);
@@ -44,12 +43,12 @@ export function Chart() {
       let newChartData = [...initialChartData];
       let total = 0;
       allTransactions.forEach((ele) => {
-        total += ele.Amount;
+        total += parseInt(ele.Amount);
         if (ele.date.length !== 0) {
           const index = parseInt(ele.date.split("-")[1], 10);
           newChartData[index - 1] = {
             ...newChartData[index - 1],
-            amount: newChartData[index - 1].amount + ele.Amount,
+            amount: newChartData[index - 1].amount + parseInt(ele.Amount),
           };
         }
       });
@@ -65,49 +64,62 @@ export function Chart() {
     },
   };
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Bar Chart</CardTitle>
-        {/* {console.log(allTransactions[0].date.split("-")[1])} */}
-      </CardHeader>
-      <CardContent className="justify-items-center">
-        <div className="w-[500px] h-[300px]">
-          <ChartContainer config={chartConfig} className="w-full h-full">
-            <BarChart
-              accessibilityLayer
-              data={chartData}
-              width={500}
-              height={300}
-              margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-            >
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="month"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={(value) => value.slice(0, 3)}
-              />
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent hideLabel />}
-              />
-              <Bar dataKey="amount" fill="var(--color-desktop)" radius={8} />
-            </BarChart>
-          </ChartContainer>
-        </div>
-      </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Total Amount:{" "}
-          <span className="text-2xl font-bold text-gray-500/75">
-            Rs {totalAmount}
-          </span>
-        </div>
-        {/* <div className="leading-none text-muted-foreground">
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle>Bar Chart</CardTitle>
+          {/* {console.log(allTransactions[0].date.split("-")[1])} */}
+        </CardHeader>
+        <CardContent className="justify-items-center">
+          <div className="w-[500px] h-[300px]">
+            <ChartContainer config={chartConfig} className="w-full h-full ">
+              {totalAmount !== 0 ? (
+                <BarChart
+                  accessibilityLayer
+                  data={chartData}
+                  width={500}
+                  height={300}
+                  margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                >
+                  <CartesianGrid vertical={false} />
+                  <XAxis
+                    dataKey="month"
+                    tickLine={false}
+                    tickMargin={10}
+                    axisLine={false}
+                    tickFormatter={(value) => value.slice(0, 3)}
+                  />
+                  <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent hideLabel />}
+                  />
+                  <Bar
+                    dataKey="amount"
+                    fill="var(--color-desktop)"
+                    radius={8}
+                  />
+                </BarChart>
+              ) : (
+                <div className="w-full h-full flex justify-center items-center">
+                  No Transaction Added
+                </div>
+              )}
+            </ChartContainer>
+          </div>
+        </CardContent>
+        <CardFooter className="flex-col items-start gap-2 text-sm">
+          <div className="flex gap-2 font-medium leading-none">
+            <span>Total Amount: </span>
+            <span className="text-2xl font-bold text-gray-500/75">
+              Rs {totalAmount}
+            </span>
+          </div>
+          {/* <div className="leading-none text-muted-foreground">
           Showing total visitors for the last 6 months
         </div> */}
-      </CardFooter>
-    </Card>
+        </CardFooter>
+      </Card>
+      {/* <Piechart allTransactions={allTransactions} totalAmount={totalAmount} /> */}
+    </>
   );
 }

@@ -3,6 +3,7 @@ import { Chart } from ".././components/custom/Chart";
 
 import { TransactionList } from "@/components/custom/TransactionList";
 import TransactionForm from "@/components/custom/TransactionForm";
+import Piechart from "@/components/custom/PieChart";
 
 function Dashboard() {
   return (
@@ -14,6 +15,7 @@ function Dashboard() {
         <TransactionForm />
       </div>
       <Chart />
+      <Piechart />
       <TransactionList />
     </div>
   );
